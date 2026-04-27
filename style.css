@@ -726,8 +726,6 @@ button {
     line-height: 1.6;
     color: var(--muted);
 }
-    font-style: italic;
-}
 
 .tech-stack {
     display: flex;
@@ -736,13 +734,22 @@ button {
 }
 
 .tech-badge {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
     border-radius: 20px;
-    padding: 6px 12px;
+    padding: 6px 14px;
     background: linear-gradient(135deg, rgba(185, 130, 87, 0.1), rgba(185, 130, 87, 0.05));
     color: var(--accent-deep);
     font-size: 0.85rem;
     font-weight: 600;
     border: 1px solid rgba(185, 130, 87, 0.2);
+}
+
+.skill-chip {
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: rgba(23, 24, 25, 0.06);
 }
 
 .skills-container {
@@ -762,8 +769,8 @@ button {
 
 .category-title {
     margin: 0 0 16px;
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 0.92rem;
+    font-weight: 600;
     color: var(--text);
 }
 
