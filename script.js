@@ -5,7 +5,7 @@ const resumeButtons = [
     document.getElementById("downloadResumeHero")
 ];
 const contactForm = document.querySelector(".contact-form");
-const revealElements = document.querySelectorAll(".section, .project-card, .timeline-item, .education-card, .contact-form");
+const revealElements = document.querySelectorAll(".section:not(.assistant-section), .project-card, .timeline-item, .education-card, .contact-form");
 
 // Mobile menu toggle for smaller screens.
 menuToggle?.addEventListener("click", () => {
@@ -166,4 +166,174 @@ const observer = new IntersectionObserver((entries) => {
 revealElements.forEach((element) => {
     element.classList.add("reveal");
     observer.observe(element);
+});
+
+// AI Assistant functionality
+const chatMessages = document.getElementById("chatMessages");
+const chatInput = document.getElementById("chatInput");
+const sendButton = document.getElementById("sendButton");
+const questionButtons = document.querySelectorAll(".question-btn");
+
+const assistantResponses = {
+    skills: "I specialize in full-stack development with expertise in C#, HTML, CSS, JavaScript, and various frameworks. My skills include frontend technologies (HTML, CSS, JS), backend development (C#, .NET), databases (MySQL, SQL Server, SQLite), and tools like DevExpress, MudBlazor, and Tekla Structures. I also have basic experience with Flutter for mobile development.",
+
+    projects: "I've worked on several impactful projects including an Order Tracking Website for Gillette Pepsi Companies, OPEX Team Applications that improved workflow efficiency, and OrkaSync - an automation server for Tekla model data processing. These projects demonstrate my ability to build practical solutions that save time and improve business processes.",
+
+    experience: "I currently work as a Junior Software Engineer II at TritonTek, Inc. since 2024, where I contribute to internal applications, automation workflows, and reporting tools. Previously, I gained foundational experience through an OJT role at NBI Satellite Office. I hold a Bachelor's degree in Computer Technology from Cebu Technological University.",
+
+    contact: "You can reach me through email at mantalabaklent@gmail.com or by phone at +63 9690708166 / +63 9945361789. I'm also available on professional platforms like GitHub and LinkedIn. Feel free to send me a message about potential opportunities or collaborations!",
+
+    availability: "Yes, I'm currently available for full-time roles and freelance projects. I'm particularly interested in opportunities involving web development, automation solutions, and software engineering roles where I can contribute to building efficient, user-friendly applications."
+};
+
+// Keywords for matching user input to responses
+const keywordMap = {
+    skills: ['skill', 'technology', 'tech', 'programming', 'language', 'framework', 'tool', 'expertise', 'proficient', 'know'],
+    projects: ['project', 'work', 'portfolio', 'built', 'created', 'developed', 'application', 'website', 'software'],
+    experience: ['experience', 'work', 'job', 'career', 'background', 'employment', 'role', 'position', 'company'],
+    contact: ['contact', 'email', 'phone', 'reach', 'connect', 'message', 'call', 'linkedin', 'github', 'social'],
+    availability: ['available', 'hire', 'job', 'work', 'freelance', 'open', 'looking', 'opportunity', 'position']
+};
+
+const fallbackResponses = [
+    "I'd be happy to help! You can ask me about Klent's skills, projects, experience, contact information, or availability.",
+    "I'm here to help you learn more about Klent. Try asking about his skills, projects, work experience, or how to get in touch!",
+    "That's an interesting question! I can tell you about Klent's technical skills, past projects, professional experience, or contact details.",
+    "I specialize in answering questions about Klent's background. Ask me about his skills, projects, experience, or contact information!"
+];
+
+function addMessage(content, isBot = true) {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `message ${isBot ? "bot-message" : "user-message"}`;
+
+    const avatar = document.createElement("div");
+    avatar.className = "message-avatar";
+    avatar.textContent = isBot ? "🤖" : "👤";
+
+    const messageContent = document.createElement("div");
+    messageContent.className = "message-content";
+
+    const paragraph = document.createElement("p");
+    paragraph.textContent = content;
+    messageContent.appendChild(paragraph);
+
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(messageContent);
+    chatMessages.appendChild(messageDiv);
+
+    // Scroll to bottom
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function processUserInput(userMessage) {
+    const message = userMessage.toLowerCase().trim();
+
+    // Check for exact matches with predefined questions
+    for (const [key, response] of Object.entries(assistantResponses)) {
+        if (message.includes(key)) {
+            return response;
+        }
+    }
+
+    // Check for keyword matches
+    for (const [category, keywords] of Object.entries(keywordMap)) {
+        for (const keyword of keywords) {
+            if (message.includes(keyword)) {
+                return assistantResponses[category];
+            }
+        }
+    }
+
+    // Check for greetings
+    if (message.match(/\b(hi|hello|hey|greetings|good morning|good afternoon|good evening)\b/)) {
+        return "Hello! I'm Klent's AI assistant. I can help you learn about his skills, projects, experience, and contact information. What would you like to know?";
+    }
+
+    // Check for thanks
+    if (message.match(/\b(thank|thanks|appreciate|grateful)\b/)) {
+        return "You're welcome! Feel free to ask me anything else about Klent.";
+    }
+
+    // Return random fallback response
+    return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+}
+
+function handleUserMessage(message) {
+    if (!message.trim()) return;
+
+    // Add user message
+    addMessage(message, false);
+
+    // Clear input
+    chatInput.value = '';
+    sendButton.disabled = true;
+
+    // Process and respond
+    setTimeout(() => {
+        const response = processUserInput(message);
+        addMessage(response, true);
+    }, 500 + Math.random() * 500); // Random delay for more natural feel
+}
+
+// Event listeners for quick question buttons
+questionButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        const question = button.dataset.question;
+        const questionText = button.textContent;
+        handleUserMessage(questionText);
+    });
+});
+
+// Event listeners for chat input
+chatInput.addEventListener("input", () => {
+    sendButton.disabled = !chatInput.value.trim();
+});
+
+chatInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter" && !sendButton.disabled) {
+        handleUserMessage(chatInput.value);
+    }
+});
+
+sendButton.addEventListener("click", () => {
+    if (!sendButton.disabled) {
+        handleUserMessage(chatInput.value);
+    }
+});
+
+// Chatbot toggle functionality
+const chatbotToggle = document.getElementById("chatbotToggle");
+const assistantSection = document.querySelector(".assistant-section");
+
+function toggleAssistant() {
+    const isHidden = assistantSection.classList.contains("hidden");
+    assistantSection.classList.toggle("hidden");
+    chatbotToggle.classList.toggle("active");
+
+    // Focus on input when opening
+    if (isHidden) {
+        setTimeout(() => {
+            chatInput.focus();
+        }, 300);
+    }
+}
+
+chatbotToggle.addEventListener("click", toggleAssistant);
+
+// Close assistant when clicking the close button
+const closeAssistantBtn = document.getElementById("closeAssistant");
+closeAssistantBtn.addEventListener("click", toggleAssistant);
+
+// Close assistant when clicking outside
+assistantSection.addEventListener("click", (e) => {
+    if (e.target === assistantSection) {
+        toggleAssistant();
+    }
+});
+
+// Close assistant with Escape key
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !assistantSection.classList.contains("hidden")) {
+        toggleAssistant();
+    }
 });
