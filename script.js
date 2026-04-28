@@ -173,6 +173,8 @@ const chatMessages = document.getElementById("chatMessages");
 const chatInput = document.getElementById("chatInput");
 const sendButton = document.getElementById("sendButton");
 const questionButtons = document.querySelectorAll(".question-btn");
+const quickQuestionsPanel = document.getElementById("quickQuestionsPanel");
+const toggleQuestionsButton = document.getElementById("toggleQuestions");
 
 const assistantResponses = {
     skills: "I specialize in full-stack development with expertise in C#, HTML, CSS, JavaScript, and various frameworks. My skills include frontend technologies (HTML, CSS, JS), backend development (C#, .NET), databases (MySQL, SQL Server, SQLite), and tools like DevExpress, MudBlazor, and Tekla Structures. I also have basic experience with Flutter for mobile development.",
@@ -208,7 +210,7 @@ function addMessage(content, isBot = true) {
 
     const avatar = document.createElement("div");
     avatar.className = "message-avatar";
-    avatar.textContent = isBot ? "🤖" : "👤";
+    avatar.textContent = isBot ? "KM" : "You";
 
     const messageContent = document.createElement("div");
     messageContent.className = "message-content";
@@ -278,10 +280,23 @@ function handleUserMessage(message) {
 // Event listeners for quick question buttons
 questionButtons.forEach(button => {
     button.addEventListener("click", () => {
-        const question = button.dataset.question;
-        const questionText = button.textContent;
+        const questionText = button.querySelector("span:last-child")?.textContent.trim() || button.textContent.trim();
         handleUserMessage(questionText);
     });
+});
+
+function setQuestionsVisibility(isVisible) {
+    quickQuestionsPanel?.classList.toggle("is-hidden", !isVisible);
+
+    if (toggleQuestionsButton) {
+        toggleQuestionsButton.textContent = isVisible ? "Hide" : "Unhide";
+        toggleQuestionsButton.setAttribute("aria-expanded", String(isVisible));
+    }
+}
+
+toggleQuestionsButton?.addEventListener("click", () => {
+    const isCurrentlyHidden = quickQuestionsPanel?.classList.contains("is-hidden");
+    setQuestionsVisibility(Boolean(isCurrentlyHidden));
 });
 
 // Event listeners for chat input
@@ -312,6 +327,7 @@ function toggleAssistant() {
 
     // Focus on input when opening
     if (isHidden) {
+        setQuestionsVisibility(true);
         setTimeout(() => {
             chatInput.focus();
         }, 300);

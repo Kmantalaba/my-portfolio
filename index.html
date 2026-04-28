@@ -399,56 +399,72 @@
                 </div>
             </section>
 
-            <section class="section assistant-section hidden" id="assistant">
-                <div class="section-heading">
-                    <p class="section-tag">AI Assistant</p>
-                    <h2>Quick answers to common questions.</h2>
-                </div>
-
+            <section class="assistant-section hidden" id="assistant">
                 <div class="assistant-container">
                     <div class="assistant-chat">
-                        <button id="closeAssistant" class="close-assistant-btn" aria-label="Close AI Assistant">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                            </svg>
-                        </button>
+                        <div class="assistant-header">
+                            <div class="assistant-identity">
+                                <div class="assistant-avatar">KM</div>
+                                <div>
+                                    <h2>AI Assistant</h2>
+                                    <p>Always here to help</p>
+                                </div>
+                            </div>
+                            <button id="closeAssistant" class="close-assistant-btn" aria-label="Close AI Assistant">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.41L10.59 13.41 4.29 19.7 2.88 18.29 9.17 12 2.88 5.71 4.29 4.3l6.3 6.29 6.29-6.29 1.42 1.41z"/>
+                                </svg>
+                            </button>
+                        </div>
                         <div class="chat-messages" id="chatMessages">
                             <div class="message bot-message">
-                                <div class="message-avatar">🤖</div>
+                                <div class="message-avatar">KM</div>
                                 <div class="message-content">
-                                    <p>Hi! I'm Klent's AI assistant. You can ask me questions about Klent's skills, projects, experience, or how to contact him. Try clicking the quick questions below or type your own message!</p>
+                                    <p>Hi, I'm Klent's AI assistant. Ask me about skills, projects, experience, availability, or how to contact him.</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="quick-questions">
-                            <button class="question-btn" data-question="skills">
-                                What are Klent's skills?
-                            </button>
-                            <button class="question-btn" data-question="projects">
-                                What projects has Klent worked on?
-                            </button>
-                            <button class="question-btn" data-question="experience">
-                                What's Klent's work experience?
-                            </button>
-                            <button class="question-btn" data-question="contact">
-                                How can I contact Klent?
-                            </button>
-                            <button class="question-btn" data-question="availability">
-                                Is Klent available for work?
-                            </button>
+                        <div class="quick-questions-panel" id="quickQuestionsPanel">
+                            <div class="quick-questions-header">
+                                <span>Suggested questions</span>
+                                <button type="button" id="toggleQuestions" class="toggle-questions-btn" aria-expanded="true">Hide</button>
+                            </div>
+                            <div class="quick-questions">
+                                <button class="question-btn" data-question="skills">
+                                    <span class="question-icon" aria-hidden="true">#</span>
+                                    <span>What are Klent's skills?</span>
+                                </button>
+                                <button class="question-btn" data-question="projects">
+                                    <span class="question-icon" aria-hidden="true">[]</span>
+                                    <span>What projects has Klent worked on?</span>
+                                </button>
+                                <button class="question-btn" data-question="experience">
+                                    <span class="question-icon" aria-hidden="true">+</span>
+                                    <span>What's Klent's work experience?</span>
+                                </button>
+                                <button class="question-btn" data-question="contact">
+                                    <span class="question-icon" aria-hidden="true">@</span>
+                                    <span>How can I contact Klent?</span>
+                                </button>
+                                <button class="question-btn" data-question="availability">
+                                    <span class="question-icon" aria-hidden="true">OK</span>
+                                    <span>Is Klent available for work?</span>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="chat-input-container">
                             <div class="chat-input-wrapper">
-                                <input type="text" id="chatInput" placeholder="Ask me anything about Klent..." class="chat-input">
-                                <button id="sendButton" class="send-btn" disabled>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <input type="text" id="chatInput" placeholder="Ask me anything..." class="chat-input">
+                                <button id="sendButton" class="send-btn" aria-label="Send message" disabled>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
                                     </svg>
                                 </button>
                             </div>
                         </div>
+                        <p class="assistant-disclaimer">AI can make mistakes. Verify important info.</p>
                     </div>
                 </div>
             </section>
